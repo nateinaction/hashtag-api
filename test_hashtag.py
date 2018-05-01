@@ -113,12 +113,13 @@ class TestMe(unittest.TestCase):
             ['x', None, 'x'],
             [None, 'o', 'o'],
         ]
+        preferred_token = 'x'
         expect = [
             hashtag.Move(row=0, col=1, score=-11),
             hashtag.Move(row=1, col=1, score=10),
             hashtag.Move(row=2, col=0, score=7),
         ]
-        self.assertEqual(expect, hashtag.rank_available_moves(board, 'o'))
+        self.assertEqual(expect, hashtag.rank_available_moves(board, preferred_token))
 
         # 'o' should play on 1, 1 to prevent 'x from winning
         board = [
@@ -126,8 +127,9 @@ class TestMe(unittest.TestCase):
             ['x', None, 'x'],
             ['x', 'o', 'o'],
         ]
+        preferred_token = 'o'
         expect = [hashtag.Move(row=0, col=1, score=-11), hashtag.Move(row=1, col=1, score=10)]
-        self.assertEqual(expect, hashtag.rank_available_moves(board))
+        self.assertEqual(expect, hashtag.rank_available_moves(board, preferred_token))
 
         # 'x' should play on 0, 1 to tie game
         board = [
@@ -135,8 +137,9 @@ class TestMe(unittest.TestCase):
             ['x', 'o', 'x'],
             ['x', 'o', 'o'],
         ]
+        preferred_token = 'x'
         expect = [hashtag.Move(row=0, col=1, score=-10)]
-        self.assertEqual(expect, hashtag.rank_available_moves(board, 'o'))
+        self.assertEqual(expect, hashtag.rank_available_moves(board, preferred_token))
 
         # No moves available should return empty array
         board = [
@@ -145,7 +148,8 @@ class TestMe(unittest.TestCase):
             ['x', 'o', 'o'],
         ]
         expect = []
-        self.assertEqual(expect, hashtag.rank_available_moves(board))
+        preferred_token = 'o'
+        self.assertEqual(expect, hashtag.rank_available_moves(board, preferred_token))
 
     def test_select_next_move(self):
         # 'x' should play on 1, 1 even though 'o' is in winning pos.
@@ -154,7 +158,6 @@ class TestMe(unittest.TestCase):
             ['x', None, 'x'],
             [None, 'o', 'o'],
         ]
-        human_player = 'o'
         seed = 0
         expect = hashtag.Move(row=1, col=1, score=10)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))
@@ -165,7 +168,6 @@ class TestMe(unittest.TestCase):
             ['x', None, 'x'],
             ['x', 'o', 'o'],
         ]
-        human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=1, col=1, score=10)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))
@@ -176,7 +178,6 @@ class TestMe(unittest.TestCase):
             ['x', 'o', 'x'],
             ['x', 'o', 'o'],
         ]
-        human_player = 'o'
         seed = 0
         expect = hashtag.Move(row=0, col=1, score=-10)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))
@@ -192,24 +193,20 @@ class TestMe(unittest.TestCase):
 
         # Should pick corner
         board = [[None, None, None], [None, None, None], [None, None, None]]
-        human_player = 'o'
         seed = 0
         expect = hashtag.Move(row=2, col=2, score=0)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))
         board = [[None, None, None], [None, 'x', None], [None, None, None]]
-        human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=2, col=2, score=0)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))
         board = [[None, 'x', None], [None, None, None], [None, None, None]]
-        human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=2, col=2, score=0)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))
 
         # Should pick center
         board = [['x', None, None], [None, None, None], [None, None, None]]
-        human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=1, col=1, score=0)
         self.assertEqual(expect, hashtag.select_next_move(board, seed))

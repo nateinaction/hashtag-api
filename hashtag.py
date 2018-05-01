@@ -18,9 +18,9 @@ def select_next_move(board, seed=None):
     if is_first_two_moves(board):
         return select_first_two_moves(board, seed)
 
-    human_player = 'o' if get_current_turn(board) == 'x' else 'x'
     # if all available moves are losing moves, choose most negatively scored move
-    ranked_moves = rank_available_moves(board, human_player)
+    preferred_token = get_current_turn(board)
+    ranked_moves = rank_available_moves(board, preferred_token)
     if are_all_losing_moves(ranked_moves):
         sorted_moves = minimize_moves(ranked_moves)
     else:
@@ -57,12 +57,12 @@ def select_first_two_moves(board, seed=None):
     return select_sorted_move(sorted_moves, seed)
 
 
-def rank_available_moves(board, human_player='x', recursive_level=0):
+def rank_available_moves(board, preferred_token, recursive_level=0):
     """
     Recursive function to rank all available moves
 
     :param board: multidimensional array, game board
-    :param human_player: token used by the human player
+    :param preferred_token: token used in next play for board sent to the API
     :param recursive_level: depth of recursion
     :return: array of Move
     """
@@ -82,16 +82,16 @@ def rank_available_moves(board, human_player='x', recursive_level=0):
                 new_board[row_i][col_i] = current_turn
                 possible_win_groups = collate_possible_win_groups(new_board)
                 winner = find_winner(possible_win_groups)
-                if winner == human_player:
-                    available_moves.append(Move(row=row_i, col=col_i, score=-10 - recursive_level))
-                elif winner != human_player and winner is not None:
+                if winner == preferred_token:
                     available_moves.append(Move(row=row_i, col=col_i, score=10 - recursive_level))
+                elif winner != preferred_token and winner is not None:
+                    available_moves.append(Move(row=row_i, col=col_i, score=-10 - recursive_level))
                 else:
-                    recursed_moves = rank_available_moves(new_board, human_player, recursive_level + 1)
+                    recursed_moves = rank_available_moves(new_board, preferred_token, recursive_level + 1)
                     if not recursed_moves:
                         available_moves.append(Move(row=row_i, col=col_i, score=0 - recursive_level))
                     else:
-                        if current_turn == human_player:
+                        if current_turn != preferred_token:
                             sorted_moves = minimize_moves(recursed_moves)
                         else:
                             sorted_moves = maximize_moves(recursed_moves)
