@@ -10,15 +10,13 @@ app = Flask(__name__)
 def api():
     if not is_valid_request(request.json):
         abort(400, 'POST should have Content-Type header set to application/json '
-                   'and json object should have valid board and humanPlayer keys')
+                   'and json object should have a valid board key')
 
-    board, human_player = request.json.get('board'), request.json.get('humanPlayer')
+    board = request.json.get('board')
     if not is_valid_board(board):
-        abort(400, 'Invalid board. ex. [["x", "o", null], ["x", null, null], [null, null, null]]')
-    if not is_valid_player(human_player):
-        abort(400, 'Invalid human player token. Try "x" or "o"')
+        abort(400, 'Invalid board. ex. [["x", null, null], ["x", "o", null], [null, null, null]]')
 
-    next_move = hashtag.select_next_move(board, human_player)
+    next_move = hashtag.select_next_move(board)
     return jsonify({
         'row': next_move[0],
         'col': next_move[1],
@@ -65,13 +63,6 @@ def is_valid_board(board):
     if 1 < abs(token_count['x'] - token_count['o']):
         return False
 
-    return True
-
-
-def is_valid_player(player_token):
-    valid_tokens = ['x', 'o']
-    if player_token not in valid_tokens:
-        return False
     return True
 
 

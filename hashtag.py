@@ -7,24 +7,24 @@ Move = namedtuple('Move', ['row', 'col', 'score'])
 SortedMoves = namedtuple('SortedMoves', ['score', 'moves'])
 
 
-def select_next_move(board, human_player='x', seed=None):
+def select_next_move(board, seed=None):
     """
     Runs recursive function to rank available moves then returns the best move
 
     :param board: multidimensional array, game board
-    :param human_player: token used by the human player
     :param seed: optional token to fix the random method
     :return: Move
     """
     if is_first_two_moves(board):
         return select_first_two_moves(board, seed)
 
+    human_player = 'o' if get_current_turn(board) == 'x' else 'x'
     # if all available moves are losing moves, choose most negatively scored move
-    ranked_available_moves = rank_available_moves(board, human_player)
-    if are_all_losing_moves(ranked_available_moves):
-        sorted_moves = minimize_moves(ranked_available_moves)
+    ranked_moves = rank_available_moves(board, human_player)
+    if are_all_losing_moves(ranked_moves):
+        sorted_moves = minimize_moves(ranked_moves)
     else:
-        sorted_moves = maximize_moves(ranked_available_moves)
+        sorted_moves = maximize_moves(ranked_moves)
     return select_sorted_move(sorted_moves, seed)
 
 

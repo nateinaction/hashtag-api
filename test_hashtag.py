@@ -157,7 +157,7 @@ class TestMe(unittest.TestCase):
         human_player = 'o'
         seed = 0
         expect = hashtag.Move(row=1, col=1, score=10)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
 
         # 'o' should play on 1, 1 to prevent 'x from winning
         board = [
@@ -168,7 +168,7 @@ class TestMe(unittest.TestCase):
         human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=1, col=1, score=10)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
 
         # 'x' should play on 0, 1 to tie game
         board = [
@@ -179,7 +179,7 @@ class TestMe(unittest.TestCase):
         human_player = 'o'
         seed = 0
         expect = hashtag.Move(row=0, col=1, score=-10)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
 
         # No moves available should return empty array
         board = [
@@ -195,24 +195,24 @@ class TestMe(unittest.TestCase):
         human_player = 'o'
         seed = 0
         expect = hashtag.Move(row=2, col=2, score=0)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
         board = [[None, None, None], [None, 'x', None], [None, None, None]]
         human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=2, col=2, score=0)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
         board = [[None, 'x', None], [None, None, None], [None, None, None]]
         human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=2, col=2, score=0)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
 
         # Should pick center
         board = [['x', None, None], [None, None, None], [None, None, None]]
         human_player = 'x'
         seed = 0
         expect = hashtag.Move(row=1, col=1, score=0)
-        self.assertEqual(expect, hashtag.select_next_move(board, human_player, seed))
+        self.assertEqual(expect, hashtag.select_next_move(board, seed))
 
 
 if __name__ == '__main__':
