@@ -13,6 +13,7 @@ def select_next_move(board, human_player='x', seed=None):
 
     :param board: multidimensional array, game board
     :param human_player: token used by the human player
+    :param seed: optional token to fix the random method
     :return: Move
     """
     if is_first_two_moves(board):

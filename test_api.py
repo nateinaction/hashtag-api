@@ -24,6 +24,10 @@ class ApiTestCase(unittest.TestCase):
         board = [['y', None, None], [None, None, None], [None, None, None]]
         self.assertFalse(api.is_valid_board(board))
 
+        # Too many 'x' plays
+        board = [['x', 'x', None], [None, None, None], [None, None, None]]
+        self.assertFalse(api.is_valid_board(board))
+
         # Should pass
         board = [['x', None, None], [None, 'o', None], [None, None, 'o']]
         self.assertTrue(api.is_valid_board(board))
