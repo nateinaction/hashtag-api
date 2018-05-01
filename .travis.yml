@@ -3,6 +3,10 @@ language: python
 python:
   - "3.6"
 
+env:
+  global:
+    - PIPENV_IGNORE_VIRTUALENVS: 1
+
 install:
   - 'pip install pipenv'
   - 'pipenv install'
@@ -13,7 +17,7 @@ before_script:
   - './cc-test-reporter before-build'
 
 script:
-  - "coverage run -m unittest test_*"
+  - 'pipenv run coverage run -m unittest test_*'
 
 after_script:
   - 'coverage xml'
