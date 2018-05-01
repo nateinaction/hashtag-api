@@ -4,13 +4,13 @@ app = Flask(__name__)
 
 
 @app.route('/tic-tac-toe/next-move')
-def poke():
+def api():
     board = request.args.get('board')
     human_player = request.args.get('human-player')
     if board and human_player:
         if is_valid_board(board):
             if is_valid_player(human_player):
-                pass
+                return 'Hello world!'
             else:
                 return 'Invalid human player token. Try "x" or "o"', 401
         else:
