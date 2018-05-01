@@ -24,12 +24,7 @@ def api():
 
 
 def is_valid_request(json_obj):
-    if not json_obj:
-        return False
-
-    board = json_obj.get('board')
-    human_player = json_obj.get('humanPlayer')
-    if not board or not human_player:
+    if not json_obj or not json_obj.get('board'):
         return False
 
     return True
