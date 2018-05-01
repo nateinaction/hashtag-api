@@ -1,6 +1,7 @@
-from flask import Flask, request, abort, jsonify
+import os
 import hashtag
 from collections import defaultdict
+from flask import Flask, request, abort, jsonify
 
 app = Flask(__name__)
 
@@ -72,3 +73,8 @@ def is_valid_player(player_token):
     if player_token not in valid_tokens:
         return False
     return True
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
