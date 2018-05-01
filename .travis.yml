@@ -4,6 +4,7 @@ python:
   - "3.6"
 
 install:
+  - 'pip install coverage'
   - 'pip install pipenv'
   - 'pipenv install'
 
@@ -13,7 +14,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - "python -m unitest"
+  - "python -m unittest"
   - "coverage run -m unittest test_*"
 
 after_script:
