@@ -18,4 +18,5 @@ script:
   - "coverage run -m unittest test_*"
 
 after_script:
+  - coverage xml
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
