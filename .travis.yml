@@ -4,19 +4,17 @@ python:
   - "3.6"
 
 install:
-  - 'pip install coverage'
   - 'pip install pipenv'
   - 'pipenv install'
 
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - 'curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter'
+  - 'chmod +x ./cc-test-reporter'
+  - './cc-test-reporter before-build'
 
 script:
-  - "python -m unittest"
-  - "coverage run -m unittest test_*"
+  - "pipenv run coverage run -m unittest test_*"
 
 after_script:
-  - coverage xml
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - 'coverage xml'
+  - './cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT'
