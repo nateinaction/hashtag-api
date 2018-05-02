@@ -188,7 +188,7 @@ class TestMe(unittest.TestCase):
             ['x', 'o', 'x'],
             ['x', 'o', 'o'],
         ]
-        expect = None
+        expect = hashtag.Move(row=None, col=None, score=0)
         self.assertEqual(expect, hashtag.select_next_move(board))
 
         # Should pick corner

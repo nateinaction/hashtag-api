@@ -21,7 +21,9 @@ def select_next_move(board, seed=None):
     # if all available moves are losing moves, choose most negatively scored move
     preferred_token = get_current_turn(board)
     ranked_moves = rank_available_moves(board, preferred_token)
-    if are_all_losing_moves(ranked_moves):
+    if not ranked_moves:
+        return Move(row=None, col=None, score=0)
+    elif are_all_losing_moves(ranked_moves):
         sorted_moves = minimize_moves(ranked_moves)
     else:
         sorted_moves = maximize_moves(ranked_moves)
