@@ -14,11 +14,20 @@
 
 - Send a POST request to the API endpoint:
 
-```
+```bash
 curl -X POST \
   https://API_ENDPOINT_URL/ \
   -H 'Content-Type: application/json' \
   -d '{
 	"board": [["x", "o", "x"], ["x", "o", "o"], ["o", "x", null]]
 }'
+```
+
+- Response will provide the best next move:
+
+```json
+{
+    "col": 2,
+    "row": 2
+}
 ```
