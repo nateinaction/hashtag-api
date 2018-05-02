@@ -2,60 +2,78 @@ import os
 import hashtag
 from collections import defaultdict
 from flask import Flask, request, abort, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/', methods=['POST'])
 def api():
     if not is_valid_request(request.json):
-        abort(400, 'POST should have Content-Type header set to application/json '
-                   'and json object should have a valid board key')
+        abort(400, 'Invalid POST Request: Content-Type must be "application/json" '
+                   'and json object should have a key called "board".')
 
     board = request.json.get('board')
-    if not is_valid_board(board):
-        abort(400, 'Invalid board. ex. [["x", null, null], ["x", "o", null], [null, null, null]]')
+    if not is_list_with_3_elements(board):
+        abort(400, 'Invalid board: Board must be an array of length 3.')
+
+    if not are_rows_valid(board):
+        abort(400, 'Invalid rows: Rows must each be arrays with a length of 3.')
+
+    if not are_tokens_valid(board):
+        abort(400, 'Invalid tokens: Valid tokens are "x", "o" or null.')
+
+    if not is_game_fair(board):
+        abort(400, 'Unfair game: Tokens must not be played more than once per turn.')
 
     next_move = hashtag.select_next_move(board)
     return jsonify({
-        'row': next_move[0],
-        'col': next_move[1],
+        'row': next_move.row,
+        'col': next_move.col,
     })
 
 
 def is_valid_request(json_obj):
-    if not json_obj or not json_obj.get('board'):
+    if not isinstance(json_obj, dict) or 'board' not in json_obj:
         return False
 
     return True
 
 
-def is_valid_board(board):
-    # Verify board is a list
-    if not isinstance(board, list):
+def is_list_with_3_elements(a_list):
+    # Verify item is a list and has 3 elements
+    if not isinstance(a_list, list) or len(a_list) != 3:
         return False
 
-    # Verify board has 3 rows
-    if len(board) != 3:
-        return False
+    return True
 
-    token_count = defaultdict(int)
-    valid_tokens = [None, 'x', 'o']
+
+def are_rows_valid(board):
     for row in board:
-        # Verify row is a list
-        if not isinstance(row, list):
+        if not is_list_with_3_elements(row):
             return False
-        # Verify each row has 3 columns
-        if len(row) != 3:
+
+    return True
+
+
+def are_tokens_valid(board):
+    valid_tokens = [None, 'x', 'o']
+    for token in board[0] + board[1] + board[2]:
+        if token not in valid_tokens:
             return False
-        for token in row:
-            # Verify tokens are either None, 'x', or 'o'
-            if token not in valid_tokens:
-                return False
-            token_count[token] += 1
+
+    return True
+
+
+def is_game_fair(board):
+    token_count = defaultdict(int)
+    for token in board[0] + board[1] + board[2]:
+        token_count[token] += 1
 
     # Verify tokens have not taken more turns than they're allotted
-    if 1 < abs(token_count['x'] - token_count['o']):
+    x_count = token_count['x'] - token_count['o']
+    if 1 < x_count or x_count < 0:
         return False
 
     return True
