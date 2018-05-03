@@ -85,9 +85,9 @@ def game_state_to_json(game_state):
         }
 
     return jsonify({
-        'state': game_state.state,
+        'boardState': game_state.state,
         'token': game_state.token,
-        'move': next_move
+        'suggestedMove': next_move
     })
 
 
