@@ -20,7 +20,7 @@ def get_game_state(board):
         return Game(state='won', token=winning_token, best_next_move=None)
 
     best_next_move = select_next_move(board)
-    return Game(state='playing', token=token, best_next_move=best_next_move)
+    return Game(state='playable', token=token, best_next_move=best_next_move)
 
 
 def select_next_move(board, seed=None):
