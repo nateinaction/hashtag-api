@@ -19,15 +19,41 @@ curl -X POST \
   https://API_ENDPOINT_URL/ \
   -H 'Content-Type: application/json' \
   -d '{
-	"board": [["x", "o", "x"], ["x", "o", "o"], ["o", "x", null]]
+	"board": [["x", "o", "o"], [null, "x", null], [null, null, null]]
 }'
 ```
 
-- Response will provide the best next move:
+### Types of responses
+
+**State: playing**
 
 ```json
 {
-    "col": 2,
-    "row": 2
+    "state": "playing",
+    "token": "x",
+    "move": {
+        "col": 2,
+        "row": 2
+    }
+}
+```
+
+**State: tied**
+
+```json
+{
+    "state": "tied",
+    "token": null,
+    "move": null
+}
+```
+
+**State: won**
+
+```json
+{
+    "state": "won",
+    "token": "x",
+    "move": null
 }
 ```
