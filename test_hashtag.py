@@ -34,6 +34,23 @@ class TestMe(unittest.TestCase):
         ]
         self.assertEqual(expect, hashtag.collate_possible_win_groups(input_board))
 
+    def test_is_game_tied(self):
+        # Win groups all none
+        possible_win_groups = [[None, None, None], [None, None, None]]
+        self.assertFalse(hashtag.is_game_tied(possible_win_groups))
+
+        # One unique token in two groups
+        possible_win_groups = [['x', None, None], ['o', None, None]]
+        self.assertFalse(hashtag.is_game_tied(possible_win_groups))
+
+        # One unique token in one group two in the other
+        possible_win_groups = [['x', None, None], ['o', 'x', None]]
+        self.assertFalse(hashtag.is_game_tied(possible_win_groups))
+
+        # Two unique token both groups
+        possible_win_groups = [['x', 'o', None], ['o', 'x', None]]
+        self.assertTrue(hashtag.is_game_tied(possible_win_groups))
+
     def test_get_current_turn(self):
         self.assertEqual('x', hashtag.get_current_turn([[None, None, None], [None, None, None], [None, None, None]]))
         self.assertEqual('o', hashtag.get_current_turn([['x', None, None], [None, None, None], [None, None, None]]))

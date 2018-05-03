@@ -3,8 +3,24 @@ import random
 from copy import deepcopy
 from collections import namedtuple
 
+Game = namedtuple('Game', ['state', 'token', 'best_next_move'])
 Move = namedtuple('Move', ['row', 'col', 'score'])
 SortedMoves = namedtuple('SortedMoves', ['score', 'moves'])
+
+
+def get_game_state(board):
+    token = get_current_turn(board)
+    possible_win_groups = collate_possible_win_groups(board)
+
+    if is_game_tied(possible_win_groups):
+        return Game(state='tied', token=None, best_next_move=None)
+
+    if is_game_won(possible_win_groups):
+        winning_token = 'x' if token == 'o' else 'o'
+        return Game(state='won', token=winning_token, best_next_move=None)
+
+    best_next_move = select_next_move(board)
+    return Game(state='playing', token=token, best_next_move=best_next_move)
 
 
 def select_next_move(board, seed=None):
@@ -187,6 +203,36 @@ def collate_possible_win_groups(board):
         [board[i][i] for i in range(3)],
         [board[i][2 - i] for i in range(3)],
     ]
+
+
+def is_game_tied(possible_win_groups):
+    """
+    Traverse possible win groups to check for occurrence of both 'x' and 'o' in same group.
+    If all groups have both tokens then game is tied.
+
+    :param possible_win_groups:
+    :return: bool
+    """
+    tokens = ['x', 'o']
+    for group in possible_win_groups:
+        if not set(tokens).issubset(set(group)):
+            return False
+
+    return True
+
+
+def is_game_won(possible_win_groups):
+    """
+    Traverse possible win groups to check for group with 3 occurrences of either 'x' or 'o'.
+
+    :param possible_win_groups:
+    :return: bool
+    """
+    for group in possible_win_groups:
+        if group.count('x') == 3 or group.count('o') == 3:
+            return True
+
+    return False
 
 
 def find_winner(possible_win_groups):

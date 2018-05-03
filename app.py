@@ -27,11 +27,8 @@ def api():
     if not is_game_fair(board):
         abort(400, 'Unfair game: Tokens must not be played more than once per turn.')
 
-    next_move = hashtag.select_next_move(board)
-    return jsonify({
-        'row': next_move.row,
-        'col': next_move.col,
-    })
+    game_state = hashtag.get_game_state(board)
+    return game_state_to_json(game_state)
 
 
 def is_valid_request(json_obj):
@@ -77,6 +74,21 @@ def is_game_fair(board):
         return False
 
     return True
+
+
+def game_state_to_json(game_state):
+    next_move = None
+    if game_state.best_next_move:
+        next_move = {
+            'row': game_state.best_next_move.row,
+            'col': game_state.best_next_move.col,
+        }
+
+    return jsonify({
+        'state': game_state.state,
+        'token': game_state.token,
+        'move': next_move
+    })
 
 
 if __name__ == "__main__":
