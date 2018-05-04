@@ -77,17 +77,17 @@ def is_game_fair(board):
 
 
 def game_state_to_json(game_state):
-    next_move = None
-    if game_state.best_next_move:
-        next_move = {
+    suggested_move = None
+    if game_state.suggested_move:
+        suggested_move = {
             'row': game_state.best_next_move.row,
             'col': game_state.best_next_move.col,
         }
 
     return jsonify({
-        'boardState': game_state.state,
-        'token': game_state.token,
-        'suggestedMove': next_move
+        'status': game_state.status,
+        'playableToken': game_state.playable_token,
+        'suggestedMove': suggested_move
     })
 
 

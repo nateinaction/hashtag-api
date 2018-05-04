@@ -29,8 +29,8 @@ curl -X POST \
 
 ```json
 {
-    "boardState": "playable",
-    "token": "x",
+    "status": "playable",
+    "playableToken": "x",
     "suggestedMove": {
         "col": 2,
         "row": 2
@@ -42,8 +42,8 @@ curl -X POST \
 
 ```json
 {
-    "boardState": "tied",
-    "token": null,
+    "status": "tied",
+    "playableToken": null,
     "suggestedMove": null
 }
 ```
@@ -52,8 +52,8 @@ curl -X POST \
 
 ```json
 {
-    "boardState": "won",
-    "token": "x",
+    "status": "won",
+    "playableToken": "x",
     "suggestedMove": null
 }
 ```
