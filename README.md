@@ -25,7 +25,7 @@ curl -X POST \
 
 ### Types of responses
 
-**State: playing**
+**Status: playable**
 
 ```json
 {
@@ -38,7 +38,7 @@ curl -X POST \
 }
 ```
 
-**State: tied**
+**Status: tied**
 
 ```json
 {
@@ -48,7 +48,7 @@ curl -X POST \
 }
 ```
 
-**State: won**
+**Status: won**
 
 ```json
 {
