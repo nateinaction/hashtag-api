@@ -42,9 +42,7 @@ curl -X POST \
 
 ```json
 {
-    "status": "tied",
-    "playableToken": null,
-    "suggestedMove": null
+    "status": "tied"
 }
 ```
 
@@ -53,7 +51,6 @@ curl -X POST \
 ```json
 {
     "status": "won",
-    "playableToken": "x",
-    "suggestedMove": null
+    "winningToken": "x"
 }
 ```
