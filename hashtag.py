@@ -3,7 +3,7 @@ import random
 from copy import deepcopy
 from collections import namedtuple
 
-Game = namedtuple('Game', ['status', 'playable_token', 'suggested_move'])
+Game = namedtuple('Game', ['status', 'token', 'suggested_move'])
 Move = namedtuple('Move', ['row', 'col', 'score'])
 SortedMoves = namedtuple('SortedMoves', ['score', 'moves'])
 
@@ -13,14 +13,14 @@ def get_game_state(board):
     possible_win_groups = collate_possible_win_groups(board)
 
     if is_game_tied(possible_win_groups):
-        return Game(status='tied', playable_token=None, suggested_move=None)
+        return Game(status='tied', token=None, suggested_move=None)
 
     if is_game_won(possible_win_groups):
         winning_token = 'x' if token == 'o' else 'o'
-        return Game(status='won', playable_token=winning_token, suggested_move=None)
+        return Game(status='won', token=winning_token, suggested_move=None)
 
     best_next_move = select_next_move(board)
-    return Game(status='playable', playable_token=token, suggested_move=best_next_move)
+    return Game(status='playable', token=token, suggested_move=best_next_move)
 
 
 def select_next_move(board, seed=None):
